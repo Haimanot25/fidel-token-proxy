@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fidel Token Proxy — Developer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'], mono: ['JetBrains Mono','ui-monospace','monospace'] },
+          colors: { brand: { 50:'#f9fafb',100:'#f3f4f6',500:'#374151',600:'#111827',700:'#030712' } }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 8px; right: 8px; }
+    .prose h2 { scroll-margin-top: 80px; }
+    .prose h3 { scroll-margin-top: 80px; }
+    .nav-link.active { color: #4f46e5; font-weight: 600; }
+    .dark .nav-link.active { color: #818cf8; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-900 dark:text-gray-100 font-sans">
+  <!-- Top bar -->
+  <header class="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2">
+          <span class="text-xl font-bold text-gray-900 dark:text-white">፨ Fidel</span>
+          <span className="text-gray-400">/</span>
+        </a>
+        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Developer Portal</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/" class="text-sm text-gray-600 dark:text-gray-300 hover:text-brand-600">Chat app</a>
+        <a href="https://github.com" target="_blank" class="text-sm text-gray-600 dark:text-gray-300 hover:text-brand-600">GitHub</a>
+        <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm">Theme</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Sidebar -->
+    <aside class="lg:col-span-3">
+      <nav class="sticky top-20 space-y-1 text-sm">
+        <div class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Getting started</div>
+        <a href="#overview" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Overview</a>
+        <a href="#benefits" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Why use Fidel</a>
+        <a href="#quickstart" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Quick start</a>
+        <a href="#auth" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Authentication</a>
+        <div class="text-xs font-semibold uppercase tracking-wider text-gray-400 mt-4 mb-2">Core</div>
+        <a href="#providers" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Providers</a>
+        <a href="#normalize" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Normalization</a>
+        <a href="#caching" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Caching</a>
+        <div class="text-xs font-semibold uppercase tracking-wider text-gray-400 mt-4 mb-2">API reference</div>
+        <a href="#endpoints" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Endpoints</a>
+        <a href="#settings-api" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Settings API</a>
+        <a href="#models-api" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Models API</a>
+        <a href="#stats-api" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Stats API</a>
+        <div class="text-xs font-semibold uppercase tracking-wider text-gray-400 mt-4 mb-2">Resources</div>
+        <a href="#sdks" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">SDKs</a>
+        <a href="#errors" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Errors</a>
+        <a href="#changelog" class="nav-link block px-3 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800">Changelog</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="lg:col-span-9 prose max-w-none">
+      <!-- Hero -->
+      <section id="overview" class="mb-12">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-2 py-0.5 text-xs rounded-full bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300 font-medium">v1.0.0</span>
+          <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 font-medium">Open Source</span>
+          <span class="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300 font-medium">MIT</span>
+        </div>
+        <h1 class="text-4xl font-bold tracking-tight mb-3">Build with Fidel Token Proxy</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-3xl">
+          An OpenAI-compatible, provider-agnostic gateway that normalizes Ethiopic scripts (Amharic, Afaan Oromoo, Tigrinya) to cut LLM token bloat, latency, and cost. Drop-in base URL for OpenAI, Anthropic, Gemini, Groq, and more.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#quickstart" class="px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition">Get started</a>
+          <a href="#endpoints" class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition">API reference</a>
+        </div>
+      </section>
+
+      <!-- Benefits for app developers -->
+      <section id="benefits" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Why app developers use Fidel</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">💸</div>
+            <div class="font-semibold mb-1">Lower cost</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Fewer tokens per Ethiopic request via homophone canonicalization and dedup.</div>
+          </div>
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">⚡</div>
+            <div class="font-semibold mb-1">Lower latency</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Smaller payloads and cached system prompts speed up first-token time.</div>
+          </div>
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">🔌</div>
+            <div class="font-semibold mb-1">Provider portability</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Swap OpenAI ↔ Anthropic ↔ Gemini ↔ Groq with one header or path change.</div>
+          </div>
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">📊</div>
+            <div class="font-semibold mb-1">Observability</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Live token, cost, and cache-hit metrics via /api/stats.</div>
+          </div>
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">🧩</div>
+            <div class="font-semibold mb-1">Zero client changes</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Any OpenAI-compatible SDK works unchanged — only the base URL changes.</div>
+          </div>
+          <div class="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+            <div class="text-2xl mb-2">🏠</div>
+            <div class="font-semibold mb-1">Local-first</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Runs on localhost; keys stay on your machine in SQLite.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick start -->
+      <section id="quickstart" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Quick start</h2>
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5">
+          <div class="code-block">
+            <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>git clone https://github.com/your-org/fidel-token-proxy
+cd fidel-token-proxy
+cp .env.example .env   # add your API keys
+npm install
+npm start
+# → http://localhost:8080  (base URL: http://localhost:8080/v1)</code></pre>
+            <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+          </div>
+          <p class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            Point any OpenAI-compatible client at <code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-900 text-sm">http://localhost:8080/v1</code>. Fidel normalizes requests and forwards to your configured upstream provider.
+          </p>
+        </div>
+      </section>
+
+      <!-- Auth -->
+      <section id="auth" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Authentication</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+          Pass your provider API key via <code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-900">Authorization: Bearer &lt;key&gt;</code>, or store it once in Fidel (Settings) and omit the header.
+        </p>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>curl http://localhost:8080/v1/chat/completions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-4o-mini","messages":[{"role":"user","content":"ሰላም"}]}'</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+      </section>
+
+      <!-- Providers -->
+      <section id="providers" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Providers</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Fidel is provider-agnostic. Supported providers:</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-4">
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">OpenAI</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Anthropic</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Gemini</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Groq</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Together</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Mistral</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">DeepSeek</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Ollama</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">OpenRouter</div>
+          <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm text-center">Cohere</div>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Select a provider per request via path, header, or query param.</p>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code># Path
+curl http://localhost:8080/v1/providers/anthropic/chat/completions ...
+
+# Header
+curl -H "X-Provider: gemini" http://localhost:8080/v1/chat/completions ...
+
+# Query
+curl "http://localhost:8080/v1/chat/completions?provider=groq" ...</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+      </section>
+
+      <!-- Normalization -->
+      <section id="normalize" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Normalization</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
+          Ge'ez homophones are canonicalized and zero-width artifacts stripped before tokenization.
+        </p>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>curl -X POST http://localhost:8080/api/normalize \
+  -H "Content-Type: application/json" \
+  -d '{"text":"ሐኀ ሠላም ፀሐይ ዐማርኛ"}'
+# {"normalizedText":"ሀሀ ሰላም ጸሀይ አማርኛ","savingsPercentage":...}</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+      </section>
+
+      <!-- Caching -->
+      <section id="caching" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Semantic caching</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Recurring system prompts are hashed (SHA-256) and stored in SQLite. Repeat requests with the same system prompt increment the cache hit counter, reducing redundant token re-transmission.
+        </p>
+      </section>
+
+      <!-- Endpoints -->
+      <section id="endpoints" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Endpoints</h2>
+        <div class="overflow-x-auto bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+              <tr>
+                <th class="px-4 py-3 font-semibold">Method</th>
+                <th class="px-4 py-3 font-semibold">Path</th>
+                <th class="px-4 py-3 font-semibold">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/v1/chat/completions</td><td class="px-4 py-2.5">Chat completions (default provider)</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/v1/completions</td><td class="px-4 py-2.5">Legacy completions</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/v1/providers/:provider/chat/completions</td><td class="px-4 py-2.5">Provider-specific chat</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/v1/providers/:provider/completions</td><td class="px-4 py-2.5">Provider-specific completions</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/api/providers</td><td class="px-4 py-2.5">List providers + config status</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/api/providers/:provider/models</td><td class="px-4 py-2.5">List active models (cached)</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/api/providers/:provider/settings</td><td class="px-4 py-2.5">Store API key / base URL / default model</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/api/settings</td><td class="px-4 py-2.5">All provider settings</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/api/normalize</td><td class="px-4 py-2.5">Normalize Ethiopic text</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/api/tokenize</td><td class="px-4 py-2.5">Count BPE tokens for text</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/api/tokenizer</td><td class="px-4 py-2.5">Tokenizer engine info</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/api/stats</td><td class="px-4 py-2.5">Aggregate metrics</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">POST</td><td class="px-4 py-2.5 font-mono text-xs">/api/stats/reset</td><td class="px-4 py-2.5">Reset metrics</td></tr>
+              <tr><td class="px-4 py-2.5 font-mono text-xs">GET</td><td class="px-4 py-2.5 font-mono text-xs">/health</td><td class="px-4 py-2.5">Health check</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Settings API -->
+      <section id="settings-api" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Settings API</h2>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>curl -X POST http://localhost:8080/api/providers/groq/settings \
+  -H "Content-Type: application/json" \
+  -d '{"apiKey":"gsk_...","defaultModel":"openai/gpt-oss-20b"}'</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-3">Settings are persisted in SQLite and override environment variables at runtime.</p>
+      </section>
+
+      <!-- Models API -->
+      <section id="models-api" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Models API</h2>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>curl "http://localhost:8080/api/providers/groq/models?refresh=1"</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mt-3">Returns active models from the upstream provider. Results are cached for 1 hour; pass <code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-900">refresh=1</code> to force re-fetch.</p>
+      </section>
+
+      <!-- Stats API -->
+      <section id="stats-api" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Stats API</h2>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>curl http://localhost:8080/api/stats
+# {"total_requests":...,"total_raw_tokens":...,"tokens_saved":...,"cache_hits":...}</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+      </section>
+
+      <!-- SDKs -->
+      <section id="sdks" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">SDK snippets</h2>
+        <h3 class="text-lg font-semibold mb-2">JavaScript (OpenAI SDK)</h3>
+        <div class="code-block mb-4">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>import OpenAI from 'openai';
+const client = new OpenAI({ baseURL: 'http://localhost:8080/v1', apiKey: process.env.OPENAI_API_KEY });
+const res = await client.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [{ role: 'user', content: 'ሰላም' }]
+});</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Python</h3>
+        <div class="code-block">
+          <pre class="bg-gray-900 dark:bg-gray-950 text-gray-100 rounded-lg p-4 overflow-x-auto text-sm font-mono"><code>from openai import OpenAI
+client = OpenAI(base_url="http://localhost:8080/v1", api_key="sk-...")
+r = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "ሰላም"}]
+)</code></pre>
+          <button class="copy-btn text-xs px-2 py-1 rounded bg-gray-700 text-gray-200 hover:bg-gray-600" onclick="copyCode(this)">Copy</button>
+        </div>
+      </section>
+
+      <!-- Errors -->
+      <section id="errors" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Errors & limits</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Errors are returned in OpenAI-compatible format: <code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-900">{"error":{"message":...,"type":...}}</code>.
+          Upstream status codes are passed through. Streaming responses use SSE (<code class="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-900">text/event-stream</code>).
+        </p>
+      </section>
+
+      <!-- Changelog -->
+      <section id="changelog" class="mb-12">
+        <h2 class="text-2xl font-bold mb-4">Changelog</h2>
+        <div class="space-y-4">
+          <div class="border-l-2 border-brand-500 pl-4">
+            <div class="text-sm font-semibold">v1.0.0</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Initial release</div>
+            <ul class="list-disc pl-5 text-sm text-gray-600 dark:text-gray-300 space-y-1">
+              <li>OpenAI-compatible reverse proxy with streaming.</li>
+              <li>Ge'ez homophone normalization & zero-width stripping.</li>
+              <li>SQLite system-prompt caching & metrics.</li>
+              <li>Multi-provider support (OpenAI, Anthropic, Gemini, Groq, …).</li>
+              <li>DB-backed settings & live model listing.</li>
+              <li>Enterprise chat UI with analytics.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="text-center text-sm text-gray-500 py-8 border-t border-gray-200 dark:border-gray-800">
+        Fidel Token Proxy — MIT License · <a href="/" class="hover:text-brand-600">Chat app</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const root = document.documentElement;
+      root.classList.toggle('dark');
+      localStorage.setItem('fidel-theme', root.classList.contains('dark') ? 'dark' : 'light');
+    }
+    (function() {
+      if (localStorage.getItem('fidel-theme') === 'light') document.documentElement.classList.remove('dark');
+    })();
+    function copyCode(btn) {
+      const pre = btn.parentElement.querySelector('pre');
+      const text = pre.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    }
+    // highlight active nav on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.nav-link');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          links.forEach((l) => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach((s) => obs.observe(s));
+  </script>
+</body>
+</html>

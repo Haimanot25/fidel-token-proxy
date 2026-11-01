@@ -1,0 +1,36 @@
+/* Fidel Token Proxy styles */
+:root {
+  --accent: #111827;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+h1, h2, h3 { letter-spacing: -0.02em; }
+
+.chat-scroll { scroll-behavior: smooth; }
+
+.message-bubble {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.stat-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.12);
+}
+
+.pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+pre code { font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(79,70,229,0.3); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

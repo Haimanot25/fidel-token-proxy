@@ -1,0 +1,41 @@
+{
+  "name": "fidel-token-proxy",
+  "version": "1.0.0",
+  "description": "OpenAI-compatible reverse proxy that normalizes Ethiopic (Amharic/Oromoo/Tigrinya) text to reduce LLM token bloat, latency, and cost.",
+  "main": "src/index.js",
+  "bin": {
+    "fidel-token-proxy": "src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "node --test tests/normalizer.test.js"
+  },
+  "keywords": [
+    "fidel",
+    "amharic",
+    "oromoo",
+    "tigrinya",
+    "llm",
+    "proxy",
+    "token",
+    "compression"
+  ],
+  "author": "Fidel Token Proxy Contributors",
+  "license": "MIT",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ],
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0",
+    "js-tiktoken": "^1.0.21"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}

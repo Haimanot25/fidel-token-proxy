@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fidel Token Proxy — Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { fontFamily: { sans: ['Inter','system-ui','sans-serif'], mono: ['JetBrains Mono','ui-monospace','monospace'] },
+        colors: { brand: { 500:'#374151',600:'#111827',700:'#030712' } } } }
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .card { transition: transform .15s ease, box-shadow .15s ease; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(79,70,229,.12); }
+    .bar { transition: height .5s ease; }
+    .skeleton { background: linear-gradient(90deg,#e5e7eb 25%,#f3f4f6 50%,#e5e7eb 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    .dark .skeleton { background: linear-gradient(90deg,#1f2937 25%,#374151 50%,#1f2937 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer { 0%{background-position:200% 0}100%{background-position:-200% 0} }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-black text-gray-900 dark:text-gray-100 font-sans">
+  <header class="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2">
+          <span class="text-xl font-bold text-gray-900 dark:text-white">፨ Fidel</span>
+        </a>
+        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">/ Admin</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="last-updated" class="text-xs text-gray-400">—</span>
+        <a href="/" class="text-sm text-gray-600 dark:text-gray-300 hover:text-brand-600">Chat</a>
+        <a href="/developers.html" class="text-sm text-gray-600 dark:text-gray-300 hover:text-brand-600">Docs</a>
+        <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 text-sm">Theme</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+    <!-- KPI row -->
+    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">Requests</span><span class="text-lg">📥</span></div>
+        <div id="kpi-requests" class="text-2xl font-bold mt-1">—</div>
+      </div>
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">Tokens saved</span><span class="text-lg">🪙</span></div>
+        <div id="kpi-saved" class="text-2xl font-bold mt-1 text-emerald-600 dark:text-emerald-400">—</div>
+      </div>
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">Compression</span><span class="text-lg">📉</span></div>
+        <div id="kpi-ratio" class="text-2xl font-bold mt-1">—</div>
+      </div>
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">Cache hit ratio</span><span class="text-lg">🎯</span></div>
+        <div id="kpi-cache" class="text-2xl font-bold mt-1 text-gray-900 dark:text-white">—</div>
+      </div>
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">p95 latency</span><span class="text-lg">⏱️</span></div>
+        <div id="kpi-p95" class="text-2xl font-bold mt-1">—</div>
+      </div>
+      <div class="card bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between"><span class="text-xs text-gray-500 dark:text-gray-400">USD saved</span><span class="text-lg">💵</span></div>
+        <div id="kpi-usd" class="text-2xl font-bold mt-1">$0.00</div>
+      </div>
+    </section>
+
+    <!-- Charts row -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
+        <h3 class="font-semibold mb-4">Cache hit vs miss</h3>
+        <div class="flex items-end gap-6 h-48">
+          <div class="flex-1 flex flex-col items-center">
+            <div id="bar-hits" class="w-full bg-emerald-400 dark:bg-emerald-600 rounded-t" style="height:0%"></div>
+            <div class="text-xs mt-2 text-gray-500">Hits <span id="cnt-hits" class="font-semibold">0</span></div>
+          </div>
+          <div class="flex-1 flex flex-col items-center">
+            <div id="bar-misses" class="w-full bg-rose-400 dark:bg-rose-600 rounded-t" style="height:0%"></div>
+            <div class="text-xs mt-2 text-gray-500">Misses <span id="cnt-misses" class="font-semibold">0</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
+        <h3 class="font-semibold mb-4">Latency percentiles (ms)</h3>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-12 text-xs text-gray-500">p50</span>
+            <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-900 rounded-full overflow-hidden"><div id="lat-p50-bar" class="h-full bg-brand-500" style="width:0%"></div></div>
+            <span id="lat-p50" class="w-12 text-right text-sm font-mono">0</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="w-12 text-xs text-gray-500">p95</span>
+            <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-900 rounded-full overflow-hidden"><div id="lat-p95-bar" class="h-full bg-amber-500" style="width:0%"></div></div>
+            <span id="lat-p95" class="w-12 text-right text-sm font-mono">0</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="w-12 text-xs text-gray-500">p99</span>
+            <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-900 rounded-full overflow-hidden"><div id="lat-p99-bar" class="h-full bg-rose-500" style="width:0%"></div></div>
+            <span id="lat-p99" class="w-12 text-right text-sm font-mono">0</span>
+          </div>
+          <div class="text-xs text-gray-400 mt-2">avg: <span id="lat-avg">0</span> ms · min: <span id="lat-min">0</span> · max: <span id="lat-max">0</span> · n=<span id="lat-n">0</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cached responses viewer -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <div>
+          <h3 class="font-semibold">Cached prompt–response pairs</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cache keys include the full request payload. Identical standalone requests produce cache hits.</p>
+        </div>
+        <div class="flex gap-2">
+          <input id="search-input" placeholder="Search request/response..." class="text-sm px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 w-64" />
+          <button onclick="loadCached()" class="text-sm px-3 py-1.5 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-200">Search</button>
+          <button onclick="loadCached(); refreshKPIs();" class="text-sm px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">Refresh</button>
+          <button onclick="invalidateAll()" class="text-sm px-3 py-1.5 rounded-lg border border-rose-300 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20">Invalidate all</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 dark:bg-gray-900 text-left">
+            <tr>
+              <th class="px-3 py-2 font-semibold">Provider</th>
+              <th class="px-3 py-2 font-semibold">Model</th>
+              <th class="px-3 py-2 font-semibold">Request</th>
+              <th class="px-3 py-2 font-semibold">Response</th>
+              <th class="px-3 py-2 font-semibold">Age</th>
+              <th class="px-3 py-2 font-semibold">Action</th>
+            </tr>
+          </thead>
+          <tbody id="cache-tbody" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+        </table>
+      </div>
+      <div id="cache-loading" class="text-center text-gray-400 py-8 text-sm">Loading…</div>
+      <div id="cache-empty" class="text-center text-gray-400 py-8 text-sm hidden">No cached responses yet. Send a request to populate.</div>
+    </section>
+
+    <footer class="text-center text-xs text-gray-500 py-6">Fidel Token Proxy — Admin Dashboard · auto-refreshing</footer>
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const root = document.documentElement;
+      root.classList.toggle('dark');
+      localStorage.setItem('fidel-theme', root.classList.contains('dark') ? 'dark' : 'light');
+    }
+    (function() {
+      if (localStorage.getItem('fidel-theme') === 'light') document.documentElement.classList.remove('dark');
+    })();
+
+    async function fetchJSON(url, opts) { const r = await fetch(url, opts); return r.json(); }
+    function fmtAge(ts) { const s = Math.floor((Date.now() - ts) / 1000); if (s < 60) return s + 's'; if (s < 3600) return Math.floor(s/60) + 'm'; return Math.floor(s/3600) + 'h'; }
+    function truncate(s, n) { s = s || ''; return s.length > n ? s.slice(0, n) + '…' : s; }
+
+    async function refreshKPIs() {
+      try {
+        const [stats, cache, lat] = await Promise.all([
+          fetchJSON('/api/stats'),
+          fetchJSON('/api/cache-stats'),
+          fetchJSON('/api/latency'),
+        ]);
+        document.getElementById('kpi-requests').textContent = (stats.total_requests || 0).toLocaleString();
+        document.getElementById('kpi-saved').textContent = (stats.tokens_saved || 0).toLocaleString();
+        document.getElementById('kpi-ratio').textContent = (stats.compression_ratio_percent || 0) + '%';
+        document.getElementById('kpi-cache').textContent = (cache.ratio || 0) + '%';
+        document.getElementById('kpi-p95').textContent = (lat.p95 || 0) + ' ms';
+        document.getElementById('kpi-usd').textContent = '$' + (stats.estimated_usd_saved || 0).toFixed(4);
+
+        const hits = cache.hits || 0;
+        const misses = cache.misses || 0;
+        const max = Math.max(hits, misses, 1);
+        document.getElementById('bar-hits').style.height = (hits / max * 100) + '%';
+        document.getElementById('bar-misses').style.height = (misses / max * 100) + '%';
+        document.getElementById('cnt-hits').textContent = hits;
+        document.getElementById('cnt-misses').textContent = misses;
+
+        document.getElementById('lat-p50').textContent = lat.p50 || 0;
+        document.getElementById('lat-p95').textContent = lat.p95 || 0;
+        document.getElementById('lat-p99').textContent = lat.p99 || 0;
+        document.getElementById('lat-avg').textContent = lat.avg || 0;
+        document.getElementById('lat-min').textContent = lat.min || 0;
+        document.getElementById('lat-max').textContent = lat.max || 0;
+        document.getElementById('lat-n').textContent = lat.count || 0;
+        const maxL = Math.max(lat.p99 || 0, 1);
+        document.getElementById('lat-p50-bar').style.width = ((lat.p50 || 0) / maxL * 100) + '%';
+        document.getElementById('lat-p95-bar').style.width = ((lat.p95 || 0) / maxL * 100) + '%';
+        document.getElementById('lat-p99-bar').style.width = ((lat.p99 || 0) / maxL * 100) + '%';
+
+        document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadCached() {
+      const loading = document.getElementById('cache-loading');
+      const empty = document.getElementById('cache-empty');
+      loading.classList.remove('hidden');
+      empty.classList.add('hidden');
+      try {
+        const search = document.getElementById('search-input').value || '';
+        const data = await fetchJSON('/api/cached-responses?search=' + encodeURIComponent(search) + '&limit=100');
+        const tbody = document.getElementById('cache-tbody');
+        tbody.innerHTML = '';
+        const items = data.items || [];
+        loading.classList.add('hidden');
+        if (items.length === 0) { empty.classList.remove('hidden'); return; }
+        for (const it of items) {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50 dark:hover:bg-gray-800/50';
+          tr.innerHTML = `
+            <td class="px-3 py-2 text-xs">${it.provider}</td>
+            <td class="px-3 py-2 text-xs font-mono">${truncate(it.model, 18)}</td>
+            <td class="px-3 py-2 text-xs font-mono max-w-xs truncate" title="${(it.request||'').replace(/"/g,'&quot;')}">${truncate(it.request, 46)}</td>
+            <td class="px-3 py-2 text-xs font-mono max-w-xs truncate" title="${(it.response||'').replace(/"/g,'&quot;')}">${truncate(it.response, 46)}</td>
+            <td class="px-3 py-2 text-xs">${fmtAge(it.created_at)}</td>
+            <td class="px-3 py-2"><button onclick="invalidate('${it.hash}')" class="text-xs px-2 py-1 rounded border border-rose-300 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20">Invalidate</button></td>
+          `;
+          tbody.appendChild(tr);
+        }
+      } catch (e) { console.error(e); loading.classList.add('hidden'); }
+    }
+
+    async function invalidate(hash) {
+      await fetch('/api/cached-responses/' + encodeURIComponent(hash), { method: 'DELETE' });
+      loadCached(); refreshKPIs();
+    }
+    async function invalidateAll() {
+      if (!confirm('Invalidate all cached responses?')) return;
+      await fetch('/api/cached-responses', { method: 'DELETE' });
+      loadCached(); refreshKPIs();
+    }
+
+    refreshKPIs();
+    loadCached();
+    setInterval(refreshKPIs, 3000);
+    setInterval(loadCached, 10000);
+  </script>
+</body>
+</html>
