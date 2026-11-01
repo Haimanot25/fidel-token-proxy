@@ -1,7 +1,7 @@
 # Fidel Token Proxy
 
 <p align="center">
-  <img src="/fidel-token-proxy/blob/main/src/public/fidel_logo.jpeg" alt="Fidel Token Proxy Logo" width="240">
+  <img src="/src/public/fidel_logo.jpeg" alt="Fidel Token Proxy Logo" width="240">
 </p>
 
 <p align="center">
